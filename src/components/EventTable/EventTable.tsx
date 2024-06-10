@@ -93,7 +93,6 @@ const EventTable: React.FC<Props> = (props) => {
       key: "eventTitle",
       render: (text, record) => (
         <Space>
-          <EventImage src={record.image} alt="image" />
           <span>{text}</span>
         </Space>
       ),
@@ -110,7 +109,7 @@ const EventTable: React.FC<Props> = (props) => {
       title: "Type",
       dataIndex: "type",
       key: "type",
-      render: (text) => (typeof text === "string" ? text : text.toString()),
+      render: (text) => (typeof text === "string" ? text : text?.toString()),
       ...getColumnSearchProps("type"),
     },
     {
@@ -118,21 +117,21 @@ const EventTable: React.FC<Props> = (props) => {
       dataIndex: "capacity",
       key: "capacity",
       sorter: (a, b) => a.capacity - b.capacity,
-      render: (text) => (typeof text === "string" ? text : text.toString()),
+      render: (text) => (typeof text === "string" ? text : text?.toString()),
       ...getColumnSearchProps("capacity"),
     },
     {
       title: "Invited Emails",
       dataIndex: "invitedEmails",
       key: "invitedEmails",
-      render: (text) => (typeof text === "string" ? text : text.toString()),
+      render: (text) => (typeof text === "string" ? text : text?.toString()),
       ...getColumnSearchProps("invitedEmails"),
     },
     {
       title: "Subscribed Emails",
       dataIndex: "subscribedUsers",
       key: "subscribedUsers",
-      render: (text) => (typeof text === "string" ? text : text.toString()),
+      render: (text) => (typeof text === "string" ? text : text?.toString()),
       ...getColumnSearchProps("subscribedUsers"),
     },
     !props.noAction

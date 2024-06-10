@@ -75,7 +75,7 @@ class BaseApi {
         // if (401 === error.response.status) {
         //   removeTokenHandler();
         // }
-        return { error: error.response.data.message };
+        return { error: error.response.data };
       }
     );
   }

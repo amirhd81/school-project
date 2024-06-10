@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, Typography } from "antd";
+import { Button, Col, Form, Input, notification, Row, Typography } from "antd";
 import { StyledHeader } from "./Auth.style";
 import {
   StyledColoredText,
@@ -12,9 +12,9 @@ import authServices from "@/app/endpoints/auth.service";
 import { useRouter } from "next/router";
 
 const Login = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   return (
     <StyledFormContainer align="middle" justify="center">
@@ -25,13 +25,27 @@ const Login = () => {
           </StyledColoredText>
         </StyledHeader>
       </Col>
-      <StyledForm form={form} onFinish={async (values: any) => {
-        setLoading(true)
-        const response = await authServices.login({ ...values });
-        localStorage.setItem('token', response?.data?.auth_token)
-        router.push('/dashboard')
-        setLoading(false)
-      }} layout="vertical">
+      <StyledForm
+        form={form}
+        onFinish={async (values: any) => {
+          setLoading(true);
+          const response = await authServices.login({ ...values });
+
+          if (response?.error?.message) {
+            notification.error({
+              message: response?.error?.message,
+              type: "error",
+              placement: "top",
+            });
+            setLoading(false);
+          } else {
+            localStorage.setItem("token", response?.data?.auth_token);
+            router.push("/dashboard");
+            setLoading(false);
+          }
+        }}
+        layout="vertical"
+      >
         <Col span={24}>
           <Form.Item name="phone" label="Phone Number">
             <StyledInput placeholder="Phone Number" />
@@ -44,7 +58,9 @@ const Login = () => {
         </Col>
         <Col span={24}>
           <Row align="middle" justify="center">
-            <Button onClick={() => form.submit()} loading={loading}>Login</Button>
+            <Button onClick={() => form.submit()} loading={loading}>
+              Login
+            </Button>
           </Row>
         </Col>
       </StyledForm>

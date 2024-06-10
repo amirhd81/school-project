@@ -20,10 +20,14 @@ import { theme } from "../../app/theme";
 import Image from "next/image";
 import profileServices from "@/app/endpoints/profile.service";
 import EventTable from "@/components/EventTable/EventTable";
+import AcceptButton from "@/components/AcceptButton";
 
 const Manager = () => {
   const [form] = Form.useForm();
+
+  const [articleForm] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [isAddArticleLoading, setIsAddArticleLoading] = useState(false);
   const [userRequestLoading, setUserRequestLoading] = useState(false);
   const [signupRequests, setSignupRequests] = useState([]);
   const [users, setUsers] = useState<any>([]);
@@ -39,14 +43,14 @@ const Manager = () => {
     reader.readAsDataURL(files[0]);
   };
 
-  useEffect(() => {
-    const getSignupRequests = async () => {
-      setUserRequestLoading(true);
-      const response = await profileServices.getSignupRequests();
-      setSignupRequests(response?.data?.requests);
-      setUserRequestLoading(false);
-    };
+  const getSignupRequests = async () => {
+    setUserRequestLoading(true);
+    const response = await profileServices.getSignupRequests();
+    setSignupRequests(response?.data?.requests);
+    setUserRequestLoading(false);
+  };
 
+  useEffect(() => {
     getSignupRequests();
   }, []);
 
@@ -82,15 +86,11 @@ const Manager = () => {
       title: "",
       dataIndex: "",
       key: "action",
-      render: () => (
-        <Row gutter={10}>
-          <Col span={12}>
-            <Button>Accept</Button>
-          </Col>
-          <Col span={12}>
-            <Button>Decline</Button>
-          </Col>
-        </Row>
+      render: (text: any, record: any) => (
+        <AcceptButton
+          getSignupRequests={() => getSignupRequests()}
+          userId={record._id}
+        />
       ),
     },
   ];
@@ -289,30 +289,6 @@ const Manager = () => {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Row gutter={10}>
-                <Col span={14}>
-                  <Form.Item name="image" label="Event Image">
-                    <StyledInput
-                      type="file"
-                      placeholder="Event Image"
-                      onChange={handleMultipleImage}
-                    />
-                  </Form.Item>
-                </Col>
-                {preview && (
-                  <Col span={10}>
-                    <Image
-                      src={preview}
-                      loader={() => preview}
-                      alt={`Preview`}
-                      width={200}
-                      height={200}
-                    />
-                  </Col>
-                )}
-              </Row>
-            </Col>
-            <Col span={24}>
               <Row align="middle" justify="center">
                 <Button loading={loading} onClick={() => form.submit()}>
                   Create
@@ -341,9 +317,9 @@ const Manager = () => {
         </StyledColoredText>
       </Col>
       <Col span={24}>
-        <EventTable />
+        <EventTable noAction />
       </Col>
-      {/* <Col
+      <Col
         span={24}
         style={{
           padding: "36px",
@@ -361,13 +337,20 @@ const Manager = () => {
           Publish Articles
         </StyledColoredText>
       </Col>
-      <Col
-        span={24}
-        style={{
-          padding: "36px",
+      <Form
+        form={articleForm}
+        onFinish={async (values: any) => {
+          setIsAddArticleLoading(true);
+          await profileServices.addArticle(values);
+          setIsAddArticleLoading(false);
         }}
       >
-        {[0, 1, 2].map((d) => (
+        <Col
+          span={24}
+          style={{
+            padding: "36px",
+          }}
+        >
           <Row
             style={{
               marginBottom: "20px",
@@ -375,7 +358,6 @@ const Manager = () => {
               borderRadius: "8px",
             }}
             align="middle"
-            key={d}
           >
             <Col span={6}>
               <img
@@ -399,64 +381,19 @@ const Manager = () => {
             >
               <Row>
                 <Col span={24}>
-                  <StyledColoredText
-                    style={{
-                      fontSize: theme.fontSize["2xl"],
-                    }}
-                    $color={theme.colors.indigo[600]}
-                  >
-                    orem ipsum dolor sit amet
-                  </StyledColoredText>
+                  <Form.Item name="title" label="Subject">
+                    <StyledInput placeholder="Subject" />
+                  </Form.Item>
                 </Col>
                 <Col span={24}>
-                  <StyledColoredText $color={theme.colors.black}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum. Lorem ipsum dolor sit
-                    amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad
-                    minim veniam, quis nostrud exercitation ullamco laboris nisi
-                    ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                    reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id
-                    est laborum. Lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis
-                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in
-                    voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                    Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum. Lorem
-                    ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                    irure dolor in reprehenderit in voluptate velit esse cillum
-                    dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non proident, sunt in culpa qui officia deserunt
-                    mollit anim id est laborum. Lorem ipsum dolor sit amet,
-                    consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad
-                    minim veniam, quis nostrud exercitation ullamco laboris nisi
-                    ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                    reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id
-                    est laborum. Lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis
-                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in
-                    voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                    Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum.
-                  </StyledColoredText>
+                  <Form.Item name="bodyText" label="Article Text">
+                    <StyledInput.TextArea
+                      style={{
+                        height: "200px",
+                      }}
+                      placeholder="Article Text"
+                    />
+                  </Form.Item>
                 </Col>
               </Row>
             </Col>
@@ -484,9 +421,23 @@ const Manager = () => {
               }}
             >
               <Row gutter={10}>
-                {[0, 1, 2].map((data) => (
+                <Form.Item name="sources" />
+                {[0, 1, 2, 3, 4].map((data, index) => (
                   <Col key={data}>
-                    <StyledInput value="https://www.google.com" />
+                    <StyledInput
+                      onChange={(e) => {
+                        const sources =
+                          articleForm.getFieldValue("sources") || [];
+                        sources[index] = e.target.value;
+                        articleForm.setFields([
+                          {
+                            name: "sources",
+                            value: sources,
+                          },
+                        ]);
+                      }}
+                      placeholder="Source"
+                    />
                   </Col>
                 ))}
               </Row>
@@ -498,11 +449,16 @@ const Manager = () => {
                 marginBottom: "25px",
               }}
             >
-              <Button>Share With Everyone</Button>
+              <Button
+                loading={isAddArticleLoading}
+                onClick={() => articleForm.submit()}
+              >
+                Share With Everyone
+              </Button>
             </Col>
           </Row>
-        ))}
-      </Col> */}
+        </Col>
+      </Form>
     </Row>
   );
 };

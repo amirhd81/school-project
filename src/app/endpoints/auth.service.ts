@@ -5,7 +5,12 @@ class Auth extends BaseApi {
     super({ suffix: "apiaccount/school-project" });
   }
 
-  signup(data: { name: string; phone: string; password: string }) {
+  signup(data: {
+    name: string;
+    phone: string;
+    password: string;
+    email: string;
+  }) {
     return this.httpService.patch(`/auth/signup`, data);
   }
 

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Row } from "antd";
+import { Button, Col, Form, notification, Row } from "antd";
 import { StyledHeader } from "./Auth.style";
 import {
   StyledColoredText,
@@ -12,7 +12,7 @@ import { useState } from "react";
 
 const Signup = () => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   return (
     <StyledFormContainer align="middle" justify="center">
@@ -26,9 +26,17 @@ const Signup = () => {
       <StyledForm
         form={form}
         onFinish={async (values: any) => {
-          setLoading(true)
-          await authServices.signup({ ...values });
-          setLoading(false)
+          setLoading(true);
+          const response = await authServices.signup({ ...values });
+
+          if (!response?.data?.ok) {
+            notification.error({
+              message: 'account already signed',
+              type: "error",
+              placement: "top",
+            });
+          }
+          setLoading(false);
         }}
         layout="vertical"
       >
@@ -43,13 +51,20 @@ const Signup = () => {
           </Form.Item>
         </Col>
         <Col span={24}>
+          <Form.Item name="email" label="Email">
+            <StyledInput placeholder="Emailr" />
+          </Form.Item>
+        </Col>
+        <Col span={24}>
           <Form.Item name="password" label="Password">
             <StyledInput.Password placeholder="Password" />
           </Form.Item>
         </Col>
         <Col span={24}>
           <Row align="middle" justify="center">
-            <Button onClick={() => form.submit()} loading={loading}>Sign Up</Button>
+            <Button onClick={() => form.submit()} loading={loading}>
+              Sign Up
+            </Button>
           </Row>
         </Col>
       </StyledForm>
