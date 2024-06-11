@@ -17,7 +17,7 @@ class Profile extends BaseApi {
       email: string;
     }
   ) {
-    return this.httpService.patch(`/user/update/${userId}`, data);
+    return this.httpService.post(`/user/update/${userId}`, data);
   }
 
   getProfile() {
@@ -29,7 +29,7 @@ class Profile extends BaseApi {
   }
 
   joinEvent(eventId: string, data: { email: string }) {
-    return this.httpService.patch(`/event/subscribe/${eventId}`, data);
+    return this.httpService.post(`/event/subscribe/${eventId}`, data);
   }
 
   addEvent(data: {
@@ -39,7 +39,7 @@ class Profile extends BaseApi {
     users: string[];
     image: string;
   }) {
-    return this.httpService.patch(`/manager/add-event`, data);
+    return this.httpService.post(`/manager/add-event`, data);
   }
 
   getSignupRequests() {
@@ -47,7 +47,7 @@ class Profile extends BaseApi {
   }
 
   acceptRequest(userId: string) {
-    return this.httpService.patch(
+    return this.httpService.post(
       `/manager/user-singup-requests/accept/${userId}`
     );
   }
@@ -65,11 +65,11 @@ class Profile extends BaseApi {
   }
 
   sendMessage(data: { message: string; reciever: string; subject: string }) {
-    return this.httpService.patch(`/message/send`, data);
+    return this.httpService.post(`/message/send`, data);
   }
 
   addArticle(data: { title: string; bodyText: string; sources: string[] }) {
-    return this.httpService.patch(`/manager/publish/article`, data);
+    return this.httpService.post(`/manager/publish/article`, data);
   }
 }
 

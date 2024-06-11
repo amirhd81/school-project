@@ -11,11 +11,11 @@ class Auth extends BaseApi {
     password: string;
     email: string;
   }) {
-    return this.httpService.patch(`/auth/signup`, data);
+    return this.httpService.post(`/auth/signup`, data);
   }
 
   login(data: { phone: string; password: string }) {
-    return this.httpService.patch(`/auth/login`, data);
+    return this.httpService.post(`/auth/login`, data);
   }
 }
 

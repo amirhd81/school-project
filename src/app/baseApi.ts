@@ -27,7 +27,7 @@ class BaseApi {
   constructor({
     suffix,
     responseType,
-    baseUrl = "http://localhost:4000",
+    baseUrl = "https://saman-school.ir",
   }: any) {
     this.httpService = axios.create({
       baseURL: `${baseUrl}${suffix ? `/${suffix}` : ""}`,
@@ -54,7 +54,7 @@ class BaseApi {
         config.headers.lang = lang;
         const token = `Bearer ${readToken()}`;
 
-        if (token) {
+        if (readToken()) {
           config.headers.Authorization = token;
         }
 
