@@ -7,6 +7,7 @@ import {
 import { useState } from "react";
 import Profile from "../Profile/Profile";
 import EventTable from "@/components/EventTable/EventTable";
+import Message from "../Message/Message";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -22,6 +23,12 @@ const Dashboard = () => {
             <StyledHeaderText>Profile</StyledHeaderText>
           </StyledHeaderItem>
           <StyledHeaderItem
+            onClick={() => setActiveTab("message")}
+            $active={activeTab === "message"}
+          >
+            <StyledHeaderText>Message</StyledHeaderText>
+          </StyledHeaderItem>
+          <StyledHeaderItem
             onClick={() => setActiveTab("events")}
             $active={activeTab === "events"}
           >
@@ -29,7 +36,11 @@ const Dashboard = () => {
           </StyledHeaderItem>
         </Row>
       </StyledHeader>
-      {activeTab === "profile" ? (
+      {activeTab === "message" ? (
+        <Col span={24}>
+          <Message />
+        </Col>
+      ) : activeTab === "profile" ? (
         <Col span={12}>
           <Profile />
         </Col>

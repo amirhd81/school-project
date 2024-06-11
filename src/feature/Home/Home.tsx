@@ -5,8 +5,16 @@ import Loading from "@/components/Loading/Loading";
 import { StyledColoredText, StyledInput } from "@/components/shared";
 import { Col, Row } from "antd";
 import { useEffect, useState } from "react";
+import {
+  StyledHeader,
+  StyledHeaderItem,
+  StyledHeaderText,
+} from "../Dashboard/Dashboard.style";
+import { useRouter } from "next/router";
 
 const HomePage = () => {
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState("profile");
   const [isArticleLoading, setIsArticleLoading] = useState(false);
   const [articles, setArticles] = useState<any>([]);
 
@@ -25,13 +33,30 @@ const HomePage = () => {
 
   return (
     <Row>
+      <StyledHeader span={24}>
+        <Row gutter={12}>
+          <StyledHeaderItem
+            onClick={() => {
+              router.push("/auth");
+            }}
+          >
+            <StyledHeaderText>Login</StyledHeaderText>
+          </StyledHeaderItem>
+          <StyledHeaderItem
+            onClick={() => {
+              router.push("/manager");
+            }}
+          >
+            <StyledHeaderText>Manager Page</StyledHeaderText>
+          </StyledHeaderItem>
+        </Row>
+      </StyledHeader>
       <Col
         span={24}
         style={{
           padding: "36px",
           fontSize: theme.fontSize["2xl"],
           paddingBottom: "10px",
-          
         }}
       >
         <StyledColoredText

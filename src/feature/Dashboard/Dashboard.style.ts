@@ -6,7 +6,7 @@ export const StyledHeader = styled(Col)`
   padding-left: 20px;
 `;
 
-export const StyledHeaderItem = styled(Col)<{ $active: boolean }>`
+export const StyledHeaderItem = styled(Col)<{ $active?: boolean }>`
   color: ${({ theme }) => theme.colors.white};
   font-size: ${({ theme }) => theme.fontSize.sm};
   padding: 10px 10px;

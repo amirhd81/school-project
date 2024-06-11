@@ -64,7 +64,7 @@ class Profile extends BaseApi {
     return this.httpService.get(`/messages`);
   }
 
-  sendMessage(data: { message: string; reciver: string; subject: string }) {
+  sendMessage(data: { message: string; reciever: string; subject: string }) {
     return this.httpService.patch(`/message/send`, data);
   }
 

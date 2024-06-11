@@ -260,7 +260,7 @@ const Manager = () => {
                 <Select
                   mode="tags"
                   options={users.map((user: any) => ({
-                    label: user.email,
+                    label: user.email || user.phone,
                     value: user._id,
                   }))}
                   placeholder="Invited Users"

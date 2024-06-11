@@ -171,7 +171,7 @@ const EventTable: React.FC<Props> = (props) => {
   return (
     <Container>
       <Table
-        scroll={{ x: 1920 }}
+        scroll={{ x: 1420 }}
         loading={isEventLoading}
         pagination={{
           pageSize: 10,
